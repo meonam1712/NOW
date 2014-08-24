@@ -1,0 +1,14 @@
+{
+	"name" : "authentication",
+	"version" : "0.0.1",
+	"private" : true,
+	"dependencies": {
+		"express" : "*",
+		"jade" : "*",
+		"mongoose" : "*",
+		"body-parser" : "*",
+		"mongodb": "*",
+		"errorhandler": "*",
+		"cookie-parser" : "*"
+	}
+}
