@@ -6,6 +6,7 @@ var express = require('express'),
 	http = require('http'),
 	User = require('./app/scheme/User.js'),
 	Product = require('./app/scheme/Product.js'),
+	Order = require('./app/scheme/Order.js'),
 	bodyParser = require('body-parser'),
 	errorHandler = require('errorhandler'),
 	cookieParser = require('cookie-parser'),
@@ -336,46 +337,163 @@ app.get('/', function(req, res) {
 app.post('/order', function (req, res) { 
 	var checks = [], str="";
 	
-	var str1 = '<h1> THÔNG TIN HÓA ĐƠN</h1><form action="/order/agree" method="post">';
-
+	var str1 = '<h1> THÔNG TIN HÓA ĐƠN</h1><form action="/order/agree" method="post">'
+			+'<div>	<label>Tên khác hàng:</label> <input type="text" name="name"/><br/></div>'
+			+'<div><label>Địa chỉ nhận hàng:</label><input type="text" name="address"/><br/></div>'
+			+'<div><label>SĐT liên lạc:</label><input type="text" name="phone"/><br/></div>'
+			+'<div><label>Chú thích:</label><textarea name="note">Enter text here...</textarea></div>'
+			+'<div>	<label>Ngày muốn nhận hàng:</label>	<input type="text" name="deliveryDate"/><br/></div>';
+			//+'<div>	<label>Category:</label><input type="text" name="category"/><br/> </div>'
 		str1 = str1 + '<table border="1" style="width:1000px">'
 			+ '<tr>'
-  			//+ '<td>Id</td>'
   			+ '<td>Product Name</td>'
   			+ '<td>Amount You Buy</td>'
   			+ '<td>Detail</td>'
   			+ '<td>Category</td>'
   			+ '<td>picture</td>'
-  			//+ '<td>createdAt</td>'
-  			//+ '<td>Contributor</td>'
 			+ '</tr>';
+
+	var i = 0,
+		tmparr = '[';
+
 	if (Array.isArray(req.body.check)) { 
 		checks = req.body.check
 	} else {
 		checks.push(req.body.check);
 	}
+	
 
 	console.log(checks);
-var i=0;
+
 	checks.forEach( function(check) {
 
 		var amount = req.body[check];
-		
+		Product.update({_id: check}, { $inc: { amount : -amount} }, function(err, l) {
+
+		})
 		Product.findOne({_id: check.toString()})
-			   .exec(function back (err, product) {
-			   		console.log(i);
-			   			str1 = str1 + '<tr>'
+			   .exec( function back (err, product) {
+			   			i = i + 1;
+			   			tmparr = tmparr + '{"productId":"'+ product._id + '", "amount":"'+ amount + '"}';
+
+			   			if (i< checks.length)  {
+			   				tmparr = tmparr + ',';
+			   			}
+			   			else {
+							 tmparr = tmparr + ']';
+							// str1= str1 + '<input type="hidden" name="products" value=' + tmparr + ' />'
+							 console.log(tmparr);
+							 res.cookie('products', tmparr);
+						}
+						
+			   			console.log(i);
+			   			str1 =  str1 + '<tr>'
   								+ '<td>'+ product.name + '</td>'
   							  	+ '<td>'+ amount + '</td>'
   							  	+ '<td>'+ product.detail + '</td>'
   							  	+ '<td>'+ product.category + '</td>'
   							  	+ '<td><img src='  + product.url + ' alt="Smiley face" height="42" width="42"></td>'
 						      	+ '</tr>';
-						 return str1;
-					//console.log(str);
+
+						if (i == checks.length) {
+							str1 = str1 + '</table>'
+								+'<div><input type="submit" value="Buy"/> </div>'
+								+ '</form>';
+							res.send(str1);
+						}
+						
 			   });
-		
+	
 	});
 
-	
+});
+
+app.post('/order/agree', function (req, res) {
+	var name = req.body.name,
+		address = req.body.address,
+		phone = req.body.phone,
+		note = req.body.note,
+		deliveryDate = req.body.deliveryDate,
+		products = JSON.parse(req.cookies['products']),
+		createdAt = new Date(),
+		status = 'NO';
+
+		//console.log("dddd"+ products[]);
+
+		Order.addOrder(name, address, phone, note, deliveryDate, status, products, createdAt, function(err, name) {
+			if (err) throw (err);
+			res.redirect('/');
+		});
+});
+
+app.get('/admin/manage/order', function(req, res) {
+	if (req.cookies['admin']!=null) {
+		res.send('<img src="../../public/lozi.jpg" alt="Smiley face" height="42" width="42">'
+			+ 'Welcome ' + req.cookies['admin'] 
+			+ '<br><a href="/admin/manage/product">PRODUCT | </a>'
+			+ '<a href="/admin/manage/order">ORDER</a>' 
+			+ '<br><a href="/admin/manage/order/view">Xem hóa đơn</a>'
+			+'<br><a href="/admin/manage/order/search">Tìm kiếm hóa đơn</a>');
+	} 
+});
+
+app.get('/admin/manage/order/view', function(req, res) {
+	if (req.cookies['admin']!=null) {
+		var str = '<img src="../../../public/lozi.jpg" alt="Smiley face" height="42" width="42">'
+			+ 'Welcome ' + req.cookies['admin'] 
+			+ '<br><a href="/admin/manage/product">PRODUCT | </a>'
+			+ '<a href="/admin/manage/order">ORDER</a>' 
+			+ '<br><a href="/admin/manage/order/view">Xem hóa đơn</a>'
+			+'<br><a href="/admin/manage/order/search">Tìm kiếm hóa đơn</a>';
+
+		str = str + '<table border="1" style="width:1000px">'
+			+ '<tr>'
+  			+ '<td>Id</td>'
+  			+ '<td>Tên khách hàng</td>'
+  			+ '<td>Địa chỉ</td>'
+  			+ '<td>Số điện thoại</td>'
+  			+ '<td>Ngày giao hàng</td>'
+  			+ '<td>Chú thích</td>'
+  			+ '<td>Sản phẩm mua</td>'
+  			+ '<td>createdAt</td>'
+  			+ '<td>Trạng thái</td>'
+			+ '</tr>';
+			
+
+		Order.find({})
+			   .exec(function(err, orders) {
+			   		//console.log(arr);
+			   		orders.forEach( function(order) {
+			   			//console.log(product.amount);
+			   			str = str + '<tr>'
+  							    + '<td>'+ order._id + '</td>'
+  								+ '<td>'+ order.name + '</td>'
+  							  	+ '<td>'+ order.address + '</td>'
+  							  	+ '<td>'+ order.phone + '</td>'
+  							  	+ '<td>'+ order.deliveryDate + '</td>'
+  							  	+ '<td>'+ order.note + '</td>'
+  							  	+ '<td>'+ JSON.stringify(order.products) + '</td>'
+
+  							  	//+ '<td><img src='  + product.url + ' alt="Smiley face" height="42" width="42"></td>'
+  						      	+ '<td>'+ order.createdAt + '</td>'
+  						      	+ '<td>'+ order.status + '</td>'
+  						      	+ '<td><a href="/admin/manage/order/view?action=del&&id=' +order._id +'">Xóa</a></td>'
+  						      	+ '<td><a href="/admin/manage/order/view?action=modify&&id=' +order._id +'">Duyệt hóa đơn</a></td>'
+						      	+ '</tr>';
+					});
+					str = str + '</table>';
+					res.send(str);
+			   });
+	console.log(req.query.id);
+	if (req.query.action == 'del') {
+		Order.remove({_id: req.query.id}, function(err) {
+
+		});
+	} else {
+		Order.update({_id: req.query.id}, {status: 'YES'}, function(err) {
+
+		});
+	}
+		
+	}
 });
