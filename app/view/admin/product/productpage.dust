@@ -1,0 +1,7 @@
+<img src="../../public/lozi.jpg" alt="Smiley face" height="42" width="42">
+Welcome {admin}
+<br><a href="/admin/manage/product">PRODUCT | </a>
+<a href="/admin/manage/order">ORDER</a>
+<br><a href="/admin/manage/product/add">Thêm sản phẩm  </a>
+<br><a href="/admin/manage/product/view">Xem sản phẩm</a>
+<br><a href="/admin/manage/product/search">Tìm kiếm sản phẩm</a>

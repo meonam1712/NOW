@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>{title}</title>
+    <script type="text/javascript" src='/javascripts/utils.js'></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+</head>
+<body>
+          
+            <form method="POST" action="/signin">
+            <label> Admin <input type="text" name="username" ></label>
+            <label>Password<input type="password" name="password"></label>
+            <input type="submit" class="submit" value="Login">
+            </form>
+</body>
+</html>

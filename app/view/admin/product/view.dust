@@ -1,0 +1,32 @@
+<img src="../../../public/lozi.jpg" alt="Smiley face" height="42" width="42">
+Welcome {admin}
+<br><a href="/admin/manage/product">PRODUCT | </a>
+<a href="/admin/manage/order">ORDER</a>
+<br><a href="/admin/manage/product/add">Thêm sản phẩm  </a>
+<br><a href="/admin/manage/product/view">Xem sản phẩm</a>
+<br><a href="/admin/manage/product/search">Tìm kiếm sản phẩm</a>
+<table border="1" style="width:1000px">
+<tr>
+<td>Id</td>
+<td>Product Name</td>
+<td>Amount</td>
+<td>Detail</td>
+<td>Category</td>
+<td>picture</td>
+<td>createdAt</td>
+<td>Contributor</td>
+</tr>
+{#exp}
+  							<td> {_id} </td>
+  							<td> {name} </td>
+  							<td> {amount} </td>
+  							<td> {detail} </td>
+  							<td> {category} </td>
+  							<td><img src= {url}  alt="Smiley face" height="42" width="42"></td>
+  						    <td> {createdAt} </td>
+  						    <td> {addedByAdmin} </td>
+  						    <td><a href={url_del}> Xóa</a></td>
+  						    <td><a href={url_modify}  >Chỉnh sửa</a></td>
+						     </tr>
+							
+{/exp}

@@ -1,0 +1,30 @@
+<img src="../../../public/lozi.jpg" alt="Smiley face" height="42" width="42">
+Welcome {admin}
+<br><a href="/admin/manage/product">PRODUCT | </a>
+<a href="/admin/manage/order">ORDER</a>
+<br><a href="/admin/manage/product/add">Thêm sản phẩm  </a>
+<br><a href="/admin/manage/product/view">Xem sản phẩm</a>
+<br><a href="/admin/manage/product/search">Tìm kiếm sản phẩm</a>
+<br/><form action="/add-new" method="post">
+<div>	
+	<label>Product Name:</label> 
+	<input type="text" name="name"/><br/>
+</div>
+<div>
+	<label>Amount:</label>
+	<input type="text" name="amount"/><br/>
+</div>
+<div>
+	<label>Detail:</label>
+	<textarea name="detail">Enter text here...</textarea>
+</div>
+<div>	
+	<label>Url for picture:</label>	
+	<input type="text" name="url"/><br/>
+</div>
+<div>	
+	<label>Category:</label>
+	<input type="text" name="category"/><br/> 
+</div>
+<div><input type="submit" value="Add new"/> </div>
+</form>

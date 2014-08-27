@@ -1,0 +1,33 @@
+<img src="../../../public/lozi.jpg" alt="Smiley face" height="42" width="42">
+Welcome {admin}
+<br><a href="/admin/manage/product">PRODUCT | </a>
+<a href="/admin/manage/order">ORDER</a>
+<br><a href="/admin/manage/order/view">Xem hóa đơn</a>
+<br><a href="/admin/manage/order/search">Tìm kiếm hóa đơn</a>
+<table border="1" style="width:1000px">
+<tr>
+<td>Id</td>
+<td>Tên khách hàng</td>
+<td>Địa chỉ</td>
+<td>Số điện thoại</td>
+<td>Ngày giao hàng</td>
+<td>Chú thích</td>
+<td>Sản phẩm mua</td>
+<td>createdAt</td>
+<td>Trạng thái</td>
+</tr>
+{#orders}
+                <td> {_id} </td>
+                <td> {name} </td>
+                <td> {address} </td>
+                <td> {phone} </td>
+                <td> {deliveryDate} </td>
+                <td> {note} </td>
+                <td> {products} </td>
+                  <td> {createdAt} </td>
+                  <td> {status} </td>
+                  <td><a href={url_del}> Xóa</a></td>
+                  <td><a href={url_check}  >Duyệt hóa đơn</a></td>
+                 </tr>
+              
+{/orders}

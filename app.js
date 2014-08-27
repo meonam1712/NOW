@@ -7,9 +7,13 @@ var express = require('express'),
 	errorHandler = require('errorhandler'),
 	cookieParser = require('cookie-parser'),
 	textSearch = require('mongoose-text-search'),
-	url = require('url');
-
-
+	url = require('url'),
+	cons = require ('consolidate'),
+    dust = require('dustjs-linkedin');
+    
+app.engine('dust', cons.dust);
+app.set('view engine', 'dust');
+app.set('views', './app/view');
 app.use("/public", express.static(__dirname + '/public'));
 app.use(bodyParser());
 app.use(cookieParser());
