@@ -6,7 +6,6 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	errorHandler = require('errorhandler'),
 	cookieParser = require('cookie-parser'),
-	textSearch = require('mongoose-text-search'),
 	url = require('url'),
 	cons = require ('consolidate'),
     dust = require('dustjs-linkedin');
@@ -14,7 +13,7 @@ var express = require('express'),
 app.engine('dust', cons.dust);
 app.set('view engine', 'dust');
 app.set('views', './app/view');
-app.use("/public", express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
 app.use(bodyParser());
 app.use(cookieParser());
 

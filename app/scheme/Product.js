@@ -10,24 +10,21 @@ var db = require('../lib/connectdb.js'),
 		addedByAdmin : String
 	}),
 
-	textSearch = require('mongoose-text-search'),
-
 	MyProduct = db.mongoose.model('Product', ProductSchema);
 
-ProductSchema.plugin(textSearch);
-ProductSchema.index({ name : 'text'});
 module.exports = db.mongoose.model('Product', ProductSchema);
 module.exports.addProduct = addProduct;
+module.exports = MyProduct;
 
-function addProduct(name, amount, detail, url, category, createdAt, addedByAdmin, callback) {
+function addProduct(product, callback) {
 	var pro = new MyProduct();
-	pro.name = name;
-	pro.amount = amount;
-	pro.detail = detail;
-	pro.url = url;
-	pro.category = category;
-	pro.createdAt = createdAt;
-	pro.addedByAdmin = addedByAdmin;
+	pro.name = product.name;
+	pro.amount = product.amount;
+	pro.detail = product.detail;
+	pro.url = product.url;
+	pro.category = product.category;
+	pro.createdAt = product.createdAt;
+	pro.addedByAdmin = product.addedByAdmin;
 	pro.save( function(err) {
 		if (err) {
 			callback(err);
@@ -35,5 +32,5 @@ function addProduct(name, amount, detail, url, category, createdAt, addedByAdmin
 		{
 			callback(null, pro)
 		}
-	})
+	});
 }

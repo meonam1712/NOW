@@ -20,17 +20,17 @@ var db = require('../lib/connectdb.js'),
 module.exports = db.mongoose.model('Order', OrderSchema);
 module.exports.addOrder = addOrder;
 
-function addOrder(name, address, phone, note, deliveryDate, status, products, createdAt, callback) {
+function addOrder(ors, callback) {
 	var order = new MyOrder();
 
-	order.name = name;
-	order.address = address;
-	order.phone = phone;
-	order.note = note;
-	order.deliveryDate = deliveryDate;
-	order.products = products;
-	order.createdAt = createdAt;
-	order.status = status;
+	order.name = ors.name;
+	order.address = ors.address;
+	order.phone = ors.phone;
+	order.note = ors.note;
+	order.deliveryDate = ors.deliveryDate;
+	order.products = ors.products;
+	order.createdAt = ors.createdAt;
+	order.status = ors.status;
 
 	order.save( function(err) {
 		if (err) {
@@ -39,5 +39,5 @@ function addOrder(name, address, phone, note, deliveryDate, status, products, cr
 		{
 			callback(null, order)
 		}
-	})
+	});
 }

@@ -14,10 +14,10 @@
   							<td> {detail} </td>
   							<td> {category} </td>
   							<td><img src= {url}  alt="Smiley face" height="42" width="42"></td>
-  						  <td><input type="checkbox" name="check" value={_id} >Buy<br></td>
+                <td><input type="checkbox" name="check" value={_id} >Buy<br></td>
                 <td><input type="text" name= {_id} >Số lượng muốn mua<br></td>
-						    </tr>
-							
+                </tr>
+						    
 {/customer}
 </table>
 <div><input type="submit" value="Buy"/> </div>

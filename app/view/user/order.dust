@@ -14,11 +14,13 @@
   				<td>picture</td>
 </tr>
 {#products}
+				<tr>
 				<td> {name}	</td>
 				<td> {amount} </td>
 				<td> {detail} </td>
 				<td> {category} </td>
 				<td><img src= {url}  alt="Smiley face" height="42" width="42"> </td>
+				</tr>
 {/products}
 </table>
 <div><input type="submit" value="Buy"/> </div>

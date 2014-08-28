@@ -5,7 +5,7 @@ var admin = require('../controller/admin.js'),
 
 module.exports = function(app) { 
 
-  	app.get('/admin', admin.adminPage );
+  	app.get('/admin', admin.adminPage);
 	app.post('/signin', admin.signin);
 	app.get('/admin/manage', manage.managePage);
 	app.get('/admin/manage/product', product.productPage);

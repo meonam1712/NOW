@@ -24,10 +24,10 @@ Welcome {admin}
                 <td> {deliveryDate} </td>
                 <td> {note} </td>
                 <td> {products} </td>
-                  <td> {createdAt} </td>
-                  <td> {status} </td>
-                  <td><a href={url_del}> Xóa</a></td>
-                  <td><a href={url_check}  >Duyệt hóa đơn</a></td>
-                 </tr>
+                <td> {createdAt} </td>
+                <td> {status} </td>
+                <td><a href={urlDel}> Xóa</a></td>
+                <td><a href={urlCheck}  >Duyệt hóa đơn</a></td>
+                </tr>
               
 {/orders}

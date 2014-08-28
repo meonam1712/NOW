@@ -23,10 +23,10 @@ Welcome {admin}
   							<td> {detail} </td>
   							<td> {category} </td>
   							<td><img src= {url}  alt="Smiley face" height="42" width="42"></td>
-  						    <td> {createdAt} </td>
-  						    <td> {addedByAdmin} </td>
-  						    <td><a href={url_del}> Xóa</a></td>
-  						    <td><a href={url_modify}  >Chỉnh sửa</a></td>
-						     </tr>
+  						  <td> {createdAt} </td>
+  						  <td> {addedByAdmin} </td>
+  						  <td><a href={urlDel}> Xóa</a></td>
+  						  <td><a href={urlModify}  >Chỉnh sửa</a></td>
+						    </tr>
 							
 {/exp}

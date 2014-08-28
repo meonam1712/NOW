@@ -1,7 +1,6 @@
-var User = require('../scheme/user.js'),
-	Product = require('../scheme/product.js'),
-	Order = require('../scheme/order.js'),
-	fs = require('fs');
+'use strict';
+
+var User = require('../scheme/user.js');
 	
 module.exports = {
 	
@@ -12,26 +11,27 @@ module.exports = {
 	},
 
 	signin: function(req, res) {
-				console.log("ddddđ"+req.body.username);
-				var username = req.body.username,
-					password = req.body.password;
+				
+		var username = req.body.username,
+			password = req.body.password;
 
-				User.findOne({username: username}, {'password': 1})
-					.exec( function (err, pass) {
-						if (pass!= null) {
-							if (password == pass.password) {
-								console.log('OKKKKKKKKKKKKKKKKK');
-								res.cookie('admin', username,  { expires: new Date(Date.now() + 60*60*1000), httpOnly: true });
-								res.redirect('/admin/manage');
-							} else {
-								console.log('FAILLLLLLLLLEDDD');
-								res.redirect('/admin');
-							}
-						} else {
-							console.log('USER NOT EXISTS');
-							res.redirect('/admin');
-						}
-					});
+		User.findOne({username: username}, {'password': 1})
+			.exec( function (err, pass) {
+				if (pass != null) {
+					if (password === pass.password) {
+						res.cookie('admin', username,  
+                                   { 
+                                       expires: new Date(Date.now() + 60*60*1000),
+                                       httpOnly: true 
+                                   });
+						res.redirect('/admin/manage');
+					} else {
+						res.redirect('/admin');
+					}
+				} else {
+					res.redirect('/admin');
+				}
+			});
 	}
 	
-}
+};

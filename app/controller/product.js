@@ -1,25 +1,25 @@
-var User = require('../scheme/user.js'),
-	Product = require('../scheme/product.js'),
-	Order = require('../scheme/order.js');
+'use strict';
+
+var Product = require('../scheme/product.js');
 	
 module.exports = {
 
 	productPage: function(req, res) {
 
-		if (req.cookies['admin']!=null) {
+		if (req.cookies.admin != null) {
 			res.render('./admin/product/productpage', {
-				admin: req.cookies['admin']
-			})
+				admin: req.cookies.admin
+			});
 		} 
 
 	},
 
 	addProduct: function(req, res) {
 
-		if (req.cookies['admin']!=null) {
+		if (req.cookies.admin != null) {
 			res.render('./admin/product/add', {
-				admin: req.cookies['admin']
-			})
+				admin: req.cookies.admin
+			});
 		} 
 
 	},
@@ -30,20 +30,32 @@ module.exports = {
 			amount = req.body.amount,
 			detail = req.body.detail,
 			url = req.body.url,
-			category = req.body.category,
+			category = req.body.category, 
 			createdAt = new Date(),
-			addedByAdmin = req.cookies['admin'];
+			addedByAdmin = req.cookies.admin;
 
-		Product.addProduct(name, amount, detail, url, category, createdAt, addedByAdmin, function(err, name) {
-			if (err) throw (err);
-			res.redirect('/admin/manage/product/add');
-		});
+		Product.addProduct({
+							 'name': name, 
+							 'amount': amount, 
+							 'detail': detail, 
+							 'url': url, 
+							 'category': category, 
+							 'createdAt': createdAt, 
+							 'addedByAdmin': addedByAdmin
+							},
+						function(err, name) {
+							if (err) {
+                                throw (err);
+                            }
+							res.redirect('/admin/manage/product/add');
+						}
+		);
 
 	},
 
 	view: function(req, res) {
 
-		if (req.cookies['admin']!=null) {
+		if (req.cookies.admin != null) {
 			Product.find({})
 				   .exec(function(err, products) {
 			  
@@ -61,20 +73,20 @@ module.exports = {
 			   					url: product.url,
 			   					createdAt: product.createdAt,
 			   					addedByAdmin: product.addedByAdmin,
-			   					url_del: "/admin/manage/product/view?action=del&&id=" + product._id ,
-			   					url_modify: "/admin/manage/product/view/modify?id=" + product._id 
+			   					urlDelel: '?action=del&&id=' + product._id ,
+			   					urlModify: './view/modify?id=' + product._id 
 
-			   				})
+			   				});
 
 			   			});
 
 						res.render('./admin/product/view', {
 							exp: exp
-						})
+						});
 
 			   		});
 			
-			if (req.query.action == 'del') {
+			if (req.query.action === 'del') {
 				Product.remove({_id: req.query.id}, function(err) {
 
 				});	
@@ -85,7 +97,7 @@ module.exports = {
 
 	modifyPage: function (req, res) {
 
-		if (req.cookies['admin']!=null) {
+		if (req.cookies.admin != null) {
 
 			var productId = req.query.id;
 
@@ -93,12 +105,13 @@ module.exports = {
 				   .exec( function(err, product) {
 
 			   			res.render('./admin/product/modify', {
-			   				admin: req.cookies['admin'],
+			   				admin: req.cookies.admin,
 			   				name: product.name,
 			   				category: product.category,
 			   				amount: product.amount,
 			   				detail: product.detail,
-			   				url: product.url
+			   				url: product.url,
+			   				_id: product._id
 			   			});
 
 			   		});
@@ -106,17 +119,17 @@ module.exports = {
 	},
 
 	modified: function (req, res) {
-		if (req.cookies['admin']!=null) {
-
+		if (req.cookies.admin != null) {
 			var productId = req.body.id,
 				name = req.body.name,
 				amount = req.body.amount,
 				detail = req.body.detail,
 				url = req.body.url,
 				category = req.body.category;
-			
+
 			Product.update({_id: productId},  
-								{ $set: {
+							{ 
+								$set: { 
 									name: name, 
 									amount: amount, 
 									detail: detail,
@@ -131,17 +144,17 @@ module.exports = {
 	},
 
 	search: function(req, res) {
-		if (req.cookies['admin']!=null) {
+		if (req.cookies.admin != null) {
 
 			res.render('./admin/product/search', {
-				admin: req.cookies['admin']
+				admin: req.cookies.admin
 			});
 
 		}
 	},
 
 	searchShow: function (req, res) { 
-		if (req.cookies['admin']!=null) {
+		if (req.cookies.admin != null) {
 			
 			Product.find( {name : req.body.name})
 				   .exec(function(err, products) {
@@ -150,7 +163,7 @@ module.exports = {
 
 						products.forEach( function(product) {
 								exp.push({
-									admin: req.cookies['admin'],
+									admin: req.cookies.admin,
 			   						name: product.name,
 			   						category: product.category,
 			   						_id: product._id,
@@ -159,9 +172,9 @@ module.exports = {
 			   						url: product.url,
 			   						createdAt: product.createdAt,
 			   						addedByAdmin: product.addedByAdmin,
-			   						url_del: "/admin/manage/product/view?action=del&&id=" + product._id ,
-			   						url_modify: "/admin/manage/product/view/modify?id=" + product._id 
-			   					})
+			   						urlDelel: '?action=del&&id=' + product._id ,
+			   						urlModify: './view/modify?id=' + product._id 
+			   					});
 						});
 
 						res.render('./admin/product/searchshow', {
@@ -172,4 +185,4 @@ module.exports = {
 	
 		}
 	}
-}
+};
