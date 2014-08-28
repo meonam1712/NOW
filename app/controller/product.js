@@ -5,23 +5,16 @@ var Product = require('../scheme/product.js');
 module.exports = {
 
 	productPage: function(req, res) {
-
-		if (req.cookies.admin != null) {
-			res.render('./admin/product/productpage', {
-				admin: req.cookies.admin
-			});
-		} 
-
+		res.render('./admin/product/productpage', {
+			admin: req.session.addProduct
+		});
 	},
 
 	addProduct: function(req, res) {
-
-		if (req.cookies.admin != null) {
-			res.render('./admin/product/add', {
-				admin: req.cookies.admin
-			});
-		} 
-
+		
+		res.render('./admin/product/add', {
+			admin: req.session.admin
+		}); 
 	},
 
 	addnew: function(req, res) {
@@ -32,7 +25,7 @@ module.exports = {
 			url = req.body.url,
 			category = req.body.category, 
 			createdAt = new Date(),
-			addedByAdmin = req.cookies.admin;
+			addedByAdmin = req.session.admin;
 
 		Product.addProduct({
 							 'name': name, 
@@ -55,134 +48,123 @@ module.exports = {
 
 	view: function(req, res) {
 
-		if (req.cookies.admin != null) {
-			Product.find({})
-				   .exec(function(err, products) {
-			  
-			   			var exp = [];
+		Product.find({})
+			   .exec(function(err, products) {
 
-			   			products.forEach( function(product) {
+			   		var exp = [];
 
-			   				exp.push({
+		   			products.forEach( function(product) {
 
-			   					name: product.name,
-			   					category: product.category,
-			   					_id: product._id,
-			   					amount: product.amount,
-			   					detail: product.detail,
-			   					url: product.url,
-			   					createdAt: product.createdAt,
-			   					addedByAdmin: product.addedByAdmin,
-			   					urlDelel: '?action=del&&id=' + product._id ,
-			   					urlModify: './view/modify?id=' + product._id 
+		   				exp.push({
 
-			   				});
+		   					name: product.name,
+		   					category: product.category,
+		   					_id: product._id,
+		   					amount: product.amount,
+		   					detail: product.detail,
+		   					url: product.url,
+		   					createdAt: product.createdAt,
+		   					addedByAdmin: product.addedByAdmin,
+		   					urlDelel: '?action=del&&id=' + product._id ,
+		   					urlModify: './view/modify?id=' + product._id 
 
-			   			});
+		   				});
 
-						res.render('./admin/product/view', {
-							exp: exp
-						});
+		   			});
 
-			   		});
+					res.render('./admin/product/view', {
+						exp: exp
+					});
+
+		   		});
 			
-			if (req.query.action === 'del') {
-				Product.remove({_id: req.query.id}, function(err) {
+		if (req.query.action === 'del') {
+			Product.remove({_id: req.query.id}, function(err) {
 
-				});	
-			} 
-		}
+			});	
+		} 
 
 	},
 
 	modifyPage: function (req, res) {
 
-		if (req.cookies.admin != null) {
+		var productId = req.query.id;
 
-			var productId = req.query.id;
+		Product.findOne({_id:productId})
+			   .exec( function(err, product) {
+			   		res.render('./admin/product/modify', {
+			   			admin: req.session.admin,
+			   			name: product.name,
+			 			category: product.category,
+			 			amount: product.amount,
+			 			detail: product.detail,
+			 			url: product.url,
+			 			_id: product._id
+		  			});
 
-			Product.findOne({_id:productId})
-				   .exec( function(err, product) {
-
-			   			res.render('./admin/product/modify', {
-			   				admin: req.cookies.admin,
-			   				name: product.name,
-			   				category: product.category,
-			   				amount: product.amount,
-			   				detail: product.detail,
-			   				url: product.url,
-			   				_id: product._id
-			   			});
-
-			   		});
-		} 
+			});
 	},
 
 	modified: function (req, res) {
-		if (req.cookies.admin != null) {
-			var productId = req.body.id,
-				name = req.body.name,
-				amount = req.body.amount,
-				detail = req.body.detail,
-				url = req.body.url,
-				category = req.body.category;
 
-			Product.update({_id: productId},  
-							{ 
-								$set: { 
-									name: name, 
-									amount: amount, 
-									detail: detail,
-									url : url,
-									category : category
-								}
-							},{},function (err) {}
-						);
-			res.redirect('/admin/manage/product/view');
+		var productId = req.body.id,
+			name = req.body.name,
+			amount = req.body.amount,
+			detail = req.body.detail,
+			url = req.body.url,
+			category = req.body.category;
 
-		}
+		Product.update({_id: productId},  
+						{ 
+							$set: { 
+								name: name, 
+								amount: amount, 
+								detail: detail,
+								url : url,
+								category : category
+							}
+						},{},function (err) {}
+					);
+		res.redirect('/admin/manage/product/view');
+
 	},
 
 	search: function(req, res) {
-		if (req.cookies.admin != null) {
 
 			res.render('./admin/product/search', {
-				admin: req.cookies.admin
+				admin: req.session.admin
 			});
 
-		}
 	},
 
 	searchShow: function (req, res) { 
-		if (req.cookies.admin != null) {
-			
-			Product.find( {name : req.body.name})
-				   .exec(function(err, products) {
-			
-						var exp = [];
-
-						products.forEach( function(product) {
-								exp.push({
-									admin: req.cookies.admin,
-			   						name: product.name,
-			   						category: product.category,
-			   						_id: product._id,
-			   						amount: product.amount,
-			   						detail: product.detail,
-			   						url: product.url,
-			   						createdAt: product.createdAt,
-			   						addedByAdmin: product.addedByAdmin,
-			   						urlDelel: '?action=del&&id=' + product._id ,
-			   						urlModify: './view/modify?id=' + product._id 
-			   					});
-						});
-
-						res.render('./admin/product/searchshow', {
-							exp: exp
-						});
-					
-   					});
 	
-		}
+		Product.find( {name : req.body.name})
+			   .exec(function(err, products) {
+		
+					var exp = [];
+
+					products.forEach( function(product) {
+							exp.push({
+								admin: req.session.admin,
+		   						name: product.name,
+		   						category: product.category,
+		   						_id: product._id,
+		   						amount: product.amount,
+		   						detail: product.detail,
+		   						url: product.url,
+		   						createdAt: product.createdAt,
+		   						addedByAdmin: product.addedByAdmin,
+		   						urlDelel: '?action=del&&id=' + product._id ,
+		   						urlModify: './view/modify?id=' + product._id 
+		   					});
+					});
+
+					res.render('./admin/product/searchshow', {
+						exp: exp
+					});
+				
+				});
+			   
 	}
 };

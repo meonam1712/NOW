@@ -21,11 +21,7 @@ module.exports = {
 				pass.comparePassword(password, function(err, isMatch) {
 					if (err)  throw err;
 					if (isMatch) {
-						res.cookie('admin', username,  
-                                   { 
-                                       expires: new Date(Date.now() + 60*60*1000),
-                                       httpOnly: true 
-                                   });
+						req.session.admin = username;
 						res.redirect('/admin/manage');
 					} else {
 						res.redirect('/admin');
