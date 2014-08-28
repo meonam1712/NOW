@@ -9,6 +9,7 @@
 		"body-parser" : "*",
 		"mongodb": "*",
 		"errorhandler": "*",
-		"cookie-parser" : "*"
+		"cookie-parser" : "*",
+		"dust": "*"
 	}
 }

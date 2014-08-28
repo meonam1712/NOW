@@ -17,8 +17,10 @@ module.exports = {
 
 		User.findOne({username: username}, {'password': 1})
 			.exec( function (err, pass) {
-				if (pass != null) {
-					if (password === pass.password) {
+				if (err)  throw err
+				pass.comparePassword(password, function(err, isMatch) {
+					if (err)  throw err;
+					if (isMatch) {
 						res.cookie('admin', username,  
                                    { 
                                        expires: new Date(Date.now() + 60*60*1000),
@@ -28,9 +30,7 @@ module.exports = {
 					} else {
 						res.redirect('/admin');
 					}
-				} else {
-					res.redirect('/admin');
-				}
+				}) ;
 			});
 	}
 	

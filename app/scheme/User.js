@@ -2,9 +2,43 @@ var db = require('../lib/connectdb.js'),
 
 	UserSchema = new db.Schema({
 		username : {type: String, unique: true},
-		password : String,
-		salt: String,
-		hash: String
-	});
+		password : String
+	}),
+	bcrypt = require('bcrypt'),
+    SALT_WORK_FACTOR = 10;
+
+UserSchema.pre('save', function(next) {
+    var user = this;
+    if (!user.isModified('password')) return next();
+    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+
+        if (err) return next(err);
+        bcrypt.hash(user.password, salt, function(err, hash) {
+            if (err) return next(err);
+            user.password = hash;
+            next();
+        });
+        
+    });
+});
+
+UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+};
+
 
 module.exports = db.mongoose.model('User', UserSchema);
+/*
+var MyProduct = db.mongoose.model('User', UserSchema);
+
+var testUser = new MyProduct({
+    username: 'nam12',
+    password: '12345'
+});
+
+testUser.save(function(err) {
+    if (err) throw err;
+});*/
