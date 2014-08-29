@@ -20,5 +20,7 @@
 						    
 {/customer}
 </table>
+<a href="?action=prev&&skip={@if cond="({skip} > 0)"}{@math key="{skip}" method="subtract" operand="1"/}{/if}" > prev</a>
+<a href="?action=next&&skip={@if cond="({continueS} > 0)"}{@math key="{skip}" method="add" operand="1"/}{:else}{skip}{/if}" > next</a>
 <div><input type="submit" value="Buy"/> </div>
 </form>

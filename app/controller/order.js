@@ -14,10 +14,18 @@ module.exports = {
 
 	view: function(req, res) {
 
-		Order.find({})
+		var skip = 0,
+			limit = 2;
+
+		if (req.query.skip) {
+			skip = req.query.skip;
+		} 
+		
+		Order.find({}, {}, {skip: skip*limit , limit: limit})
 	   	   .exec(function(err, orders) {
 
-   		   		var ors = [];
+   		   		var ors = [],
+   		   			continueS = 1;
 
 		   		orders.forEach( function(order) {
 
@@ -37,9 +45,15 @@ module.exports = {
 		   			
 				});
 
+				if (ors.length === 0) {
+			   				continueS = 0;
+			   	}
+
 				res.render('./admin/order/view',{
 					admin: req.cookies.admin,
-					orders: ors
+					orders: ors,
+					continueS: continueS,
+					skip: skip
 				});
 
 		   });

@@ -9,8 +9,12 @@ var express = require('express'),
 	url = require('url'),
 	cons = require ('consolidate'),
     dust = require('dustjs-linkedin'),
-    session = require('express-session');
-    
+    session = require('express-session'),
+    paginate = require('express-paginate');
+
+dust.helpers = require('dustjs-helpers');
+
+app.use(paginate.middleware(10, 50))
 app.engine('dust', cons.dust);
 app.set('view engine', 'dust');
 app.set('views', './app/view');

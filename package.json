@@ -1,15 +1,17 @@
 {
-	"name" : "authentication",
-	"version" : "0.0.1",
-	"private" : true,
-	"dependencies": {
-		"express" : "*",
-		"jade" : "*",
-		"mongoose" : "*",
-		"body-parser" : "*",
-		"mongodb": "*",
-		"errorhandler": "*",
-		"cookie-parser" : "*",
-		"dust": "*"
-	}
+  "name": "authentication",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "dust": "^0.3.0",
+    "errorhandler": "*",
+    "express": "*",
+    "express-paginate": "0.0.2",
+    "jade": "*",
+    "mongodb": "*",
+    "mongoose": "*",
+    "mongoose-paginate": "^3.1.0"
+  }
 }

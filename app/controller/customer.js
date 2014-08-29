@@ -6,10 +6,19 @@ var Product = require('../scheme/product.js'),
 module.exports = {
 
 	view: function(req, res) {
-		Product.find({})
+
+		var skip = 0,
+			limit = 2;
+
+		if (req.query.skip) {
+			skip = req.query.skip;
+		} 
+		
+		Product.find({}, {}, {skip: skip*limit , limit: limit})
 			   .exec(function(err, products) {
 
-			   		var customer = [];
+			   		var customer = [],
+			   			continueS = 1;
 
 			   		products.forEach( function(product) {
 
@@ -23,9 +32,15 @@ module.exports = {
 			   			});
 
 					});
+			   		
+			   		if (products.length === 0) {
+			   				continueS = 0;
+			   		}
 
 					res.render('./user/view',{
-						customer: customer
+						customer: customer,
+						skip: skip,
+						continueS: continueS
 					});
 
 			   });

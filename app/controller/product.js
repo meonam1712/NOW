@@ -47,11 +47,19 @@ module.exports = {
 	},
 
 	view: function(req, res) {
+		
+		var skip = 0,
+			limit = 2;
 
-		Product.find({})
+		if (req.query.skip) {
+			skip = req.query.skip;
+		} 
+
+		Product.find({}, {}, {skip: skip*limit , limit: limit})
 			   .exec(function(err, products) {
 
-			   		var exp = [];
+			   		var exp = [],
+			   			continueS = 1;
 
 		   			products.forEach( function(product) {
 
@@ -72,8 +80,14 @@ module.exports = {
 
 		   			});
 
+			   		if (exp.length === 0) {
+			   				continueS = 0;
+			   		}
+
 					res.render('./admin/product/view', {
-						exp: exp
+						exp: exp,
+						skip: skip,
+						continueS: continueS
 					});
 
 		   		});
@@ -138,11 +152,19 @@ module.exports = {
 	},
 
 	searchShow: function (req, res) { 
-	
-		Product.find( {name : req.body.name})
+		
+		var skip = 0,
+			limit = 2;
+
+		if (req.query.skip) {
+			skip = req.query.skip;
+		} 
+
+		Product.find( {name : req.body.name}, {}, {skip: skip*limit , limit: limit})
 			   .exec(function(err, products) {
 		
-					var exp = [];
+					var exp = [],
+						continueS = 1;
 
 					products.forEach( function(product) {
 							exp.push({
@@ -161,7 +183,9 @@ module.exports = {
 					});
 
 					res.render('./admin/product/searchshow', {
-						exp: exp
+						exp: exp,
+						skip: skip,
+						continueS: continueS
 					});
 				
 				});
